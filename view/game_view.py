@@ -5,6 +5,7 @@ from constants import (
     GameState
 )
 from model.game_model import GameModel
+from model.circuit import CIRCUIT_SPECS
 
 
 class GameView:
@@ -17,9 +18,33 @@ class GameView:
         self.screen.fill(COLOR_BG)
         if model.state == GameState.MENU:
             self._draw_menu(model)
+        elif model.state == GameState.CIRCUIT_SELECT:
+            self._draw_circuit_select(model)
         elif model.state == GameState.RACING:
             self._draw_racing(model)
         pygame.display.flip()
+
+    def _draw_circuit_select(self, model: GameModel) -> None:
+        cx = WINDOW_WIDTH // 2
+
+        title_surf = self.font.render(
+            "Choisissez un circuit (Haut/Bas, Enter)", True, COLOR_ACCENT)
+        self.screen.blit(title_surf, title_surf.get_rect(center=(cx, 160)))
+
+        for i, spec in enumerate(CIRCUIT_SPECS):
+            selected = i == model.selected_circuit
+            rect = pygame.Rect(cx - 140, 295 + i * 80, 280, 50)
+            pygame.draw.rect(self.screen, COLOR_PANEL, rect, border_radius=8)
+            pygame.draw.rect(self.screen,
+                             COLOR_ACCENT if selected else COLOR_PANEL_BORDER,
+                             rect, 2, border_radius=8)
+            swatch = pygame.Rect(rect.x + 10, rect.y + 10, 30, 30)
+            pygame.draw.rect(self.screen, spec["color"], swatch,
+                             border_radius=4)
+            text_surf = self.font.render(
+                spec["name"], True, COLOR_ACCENT if selected else COLOR_TEXT)
+            self.screen.blit(text_surf, text_surf.get_rect(
+                midleft=(swatch.right + 15, rect.centery)))
 
     def _draw_menu(self, model: GameModel) -> None:
         cx = WINDOW_WIDTH // 2

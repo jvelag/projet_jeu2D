@@ -1,6 +1,12 @@
 from model.road_tile import RoadTile
 from constants import TILE_SIZE
 
+CIRCUIT_SPECS = [
+    {"name": "Prairie", "color": (80, 140, 80)},
+    {"name": "Désert", "color": (190, 160, 90)},
+    {"name": "Asphalte", "color": (80, 80, 90)},
+]
+
 
 class Circuit:
 

@@ -16,6 +16,7 @@ CAR_HEIGHT = 50
 
 class GameState:
     MENU = "menu"
+    CIRCUIT_SELECT = "circuit_select"
     RACING = "racing"
 
 

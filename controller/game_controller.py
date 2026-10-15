@@ -35,18 +35,36 @@ class GameController:
                 self.handle_keydown(event.key)
 
     def handle_keydown(self, key: int) -> None:
-
         state = self.model.state
 
         if state == GameState.MENU:
             self.handle_menu_key(key)
+        elif state == GameState.CIRCUIT_SELECT:
+            self.handle_circuit_select_key(key)
+        elif state == GameState.RACING:
+            self.handle_racing_key(key)
 
     def handle_menu_key(self, key: int) -> None:
         if key == pygame.K_RETURN:
+            self.model.state = GameState.CIRCUIT_SELECT
+        elif key == pygame.K_ESCAPE:
+            self.quit()
+
+    def handle_circuit_select_key(self, key: int) -> None:
+        if key == pygame.K_UP:
+            self.model.select_previous_circuit()
+        elif key == pygame.K_DOWN:
+            self.model.select_next_circuit()
+        elif key == pygame.K_RETURN:
             self.model.load_circuit()
             self.model.state = GameState.RACING
         elif key == pygame.K_ESCAPE:
-            self.quit()
+            self.model.state = GameState.MENU
+
+    def handle_racing_key(self, key: int) -> None:
+        if key == pygame.K_ESCAPE:
+            self.model.state = GameState.MENU
+
 
     def update(self) -> None:
         if self.model.state != GameState.RACING:
